@@ -43,9 +43,58 @@ const addnewStudents = (req, res) => {
     });
 };
 
+const updateStudent = (req, res)=> {
+    const id = parseInt(req.params.id)
+    const updatedData = req.body
+    db.getStudentsList()
+    .then(students => {
+        const index = students.findIndex(item => item.id === id)
+         students[index] = updatedData        
+         res.send({ message: "ok", data: students });
+    })    
+}
+
+
+const deleteStudent = (req, res)=> {
+    const id = parseInt(req.params.id)
+    db.getStudentsList()
+    .then((students)=> {
+        const deletedStudent = students.find(item => item.id === id)
+        const updatedData = students.filter(item => item.id !== id)
+        db.writeStudentData(updatedData)
+        .then(()=> {
+            res.send({ message: "ok", data: deletedStudent });
+        })
+    })
+}
+
+const studentDetail = (req, res)=> {
+    const id = parseInt(req.params.id)
+    db.getStudentsList()
+    .then((students)=> {
+        const selectedStudent = students.find(item => item.id === id)
+        if(selectedStudent){
+            res.send({message:"ok", data: selectedStudent })
+        }else {
+            res.status(404).send({message:"Data Not Found", data: {}})
+        }
+    })
+    .catch(error => {
+         res
+           .status(400)
+           .send({ message: "Error", data: error });
+    })
+}
+
 router.route("/")
 .get(getStudents)
 .post(addnewStudents);
+
+router.route("/:id")
+.get(studentDetail)
+.put(updateStudent)
+.delete(deleteStudent)
+
 
 
 module.exports = router

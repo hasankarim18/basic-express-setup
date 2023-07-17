@@ -1,6 +1,5 @@
 const express = require('express')
 const cors = require('cors')
-const db = require('./db')
 const studentRouter = require('./router/studentRouter')
 
 
@@ -18,6 +17,7 @@ app.get('/', (req, res)=> {
 // using name function rather than call back 
 
 app.use('/students', studentRouter)
+
 
 
 
