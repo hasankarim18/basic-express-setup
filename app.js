@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const fs = require('fs')
+const db = require('./db')
 
 
 const app = express()
@@ -15,11 +15,16 @@ app.get('/', (req, res)=> {
 } )
 
 
+
 app.get('/students', (req, res)=> {
-    fs.readFile('./database/student.json', (err, data)=> {
-        const students = JSON.parse(data)       
-        res.send(students)
-    })
+   db.getStudentsList()
+     .then((students) => {
+       res.status(200).send({ message: "success", data:  students  });
+     })
+     .catch((err) => {
+        console.log(err)
+       res.status(400).send({ message: "failed", data: { err } });
+     });
 } )
 
 
