@@ -57,10 +57,11 @@ const addnewStudents = (req, res)=> {
     })
 }
 
+app.route("/students")
+    .get(getStudents)
+    .post(addnewStudents);
 
-app.get('/students', getStudents)
 
-app.post('/students', addnewStudents)
 
 
 app.listen(port, ()=> {
